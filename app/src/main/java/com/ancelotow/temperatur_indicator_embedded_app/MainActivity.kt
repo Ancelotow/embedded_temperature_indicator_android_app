@@ -13,10 +13,13 @@ import android.os.Handler
 import android.os.Message
 import android.provider.Settings.Global.DEVICE_NAME
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.ancelotow.temperatur_indicator_embedded_app.models.repositories.BluetoothEmbeddedStateError
+import com.ancelotow.temperatur_indicator_embedded_app.models.repositories.BluetoothEmbeddedStateJsonError
 import com.ancelotow.temperatur_indicator_embedded_app.models.repositories.BluetoothEmbeddedStateLoading
 import com.ancelotow.temperatur_indicator_embedded_app.models.repositories.BluetoothEmbeddedStateSuccess
 import com.ancelotow.temperatur_indicator_embedded_app.models.services.BluetoothEmbeddedService
@@ -26,13 +29,15 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val addressMac = "00:22:06:01:0A:5A"
+    private val deviceName = "HC-06"
     private var bluetoothAdapter: BluetoothAdapter? = null
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.hide()
         bluetoothConnection()
     }
 
@@ -45,20 +50,19 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun bluetoothConnection() {
+        val txtTemperature = findViewById<TextView>(R.id.txtTemperature)
         val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
         this.bluetoothAdapter = bluetoothManager.getAdapter()
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
         pairedDevices?.forEach { device ->
-            val deviceName = if (!checkPermissionBluetoothDevice(context = this)) {
+            if (!checkPermissionBluetoothDevice(context = this)) {
                 return
             } else {
 
             }
-            Log.i("---- Device name", device.name)
-            Log.i("---- Device MAC", device.address)
         }
 
-        val deviceEmbedded = pairedDevices?.find { device -> device.address == addressMac }
+        val deviceEmbedded = pairedDevices?.find { device -> device.name == deviceName }
         if (deviceEmbedded != null) {
             val vm: MainViewModel by viewModels { MainViewModel.Factory(deviceEmbedded) }
             viewModel = vm
@@ -67,11 +71,14 @@ class MainActivity : AppCompatActivity() {
                     is BluetoothEmbeddedStateError -> {
                         it.ex.message?.let { it1 -> Log.e("error", it1) }
                     }
+                    is BluetoothEmbeddedStateJsonError -> {
+                        it.ex.message?.let { it1 -> Log.e("error json", it1) }
+                    }
                     BluetoothEmbeddedStateLoading -> {
                         // TODO:
                     }
                     is BluetoothEmbeddedStateSuccess -> {
-                        it.message?.let { it1 -> Log.d("Message bluetooth", it1) }
+                        txtTemperature.text = "${it.response.temperature.celsius}°C"
                     }
                 }
             }
