@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.ancelotow.temperatur_indicator_embedded_app"
-        minSdk 29
+        minSdk 31
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -41,4 +41,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'androidx.activity:activity-ktx:1.5.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.5.0"
 }
