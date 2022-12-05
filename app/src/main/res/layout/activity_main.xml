@@ -21,10 +21,9 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/circle"
+        android:id="@+id/circle_indicator"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:src="@drawable/circle"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:layout_constraintDimensionRatio="1:1"
@@ -43,10 +42,10 @@
         android:textColor="@color/white"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/circle"
-        app:layout_constraintEnd_toEndOf="@+id/circle"
-        app:layout_constraintStart_toStartOf="@+id/circle"
-        app:layout_constraintTop_toTopOf="@+id/circle" />
+        app:layout_constraintBottom_toBottomOf="@+id/circle_indicator"
+        app:layout_constraintEnd_toEndOf="@+id/circle_indicator"
+        app:layout_constraintStart_toStartOf="@+id/circle_indicator"
+        app:layout_constraintTop_toTopOf="@+id/circle_indicator" />
 
     <TextView
         android:id="@+id/txtFelt"

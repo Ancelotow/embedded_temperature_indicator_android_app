@@ -7,23 +7,22 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import androidx.activity.viewModels
-import android.os.Handler
-import android.os.Message
-import android.provider.Settings.Global.DEVICE_NAME
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.ancelotow.temperatur_indicator_embedded_app.models.repositories.BluetoothEmbeddedStateError
 import com.ancelotow.temperatur_indicator_embedded_app.models.repositories.BluetoothEmbeddedStateJsonError
 import com.ancelotow.temperatur_indicator_embedded_app.models.repositories.BluetoothEmbeddedStateLoading
 import com.ancelotow.temperatur_indicator_embedded_app.models.repositories.BluetoothEmbeddedStateSuccess
-import com.ancelotow.temperatur_indicator_embedded_app.models.services.BluetoothEmbeddedService
-import com.ancelotow.temperatur_indicator_embedded_app.models.services.MESSAGE_READ
+import com.ancelotow.temperatur_indicator_embedded_app.models.services.ColorTemperatureService
 import java.util.*
 
 
@@ -51,6 +50,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     private fun bluetoothConnection() {
         val txtTemperature = findViewById<TextView>(R.id.txtTemperature)
+        val circleIndicator = findViewById<ImageView>(R.id.circle_indicator)
         val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
         this.bluetoothAdapter = bluetoothManager.getAdapter()
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-
         val deviceEmbedded = pairedDevices?.find { device -> device.name == deviceName }
         if (deviceEmbedded != null) {
             val vm: MainViewModel by viewModels { MainViewModel.Factory(deviceEmbedded) }
@@ -78,12 +77,20 @@ class MainActivity : AppCompatActivity() {
                         // TODO:
                     }
                     is BluetoothEmbeddedStateSuccess -> {
-                        txtTemperature.text = "${it.response.temperature.celsius}°C"
+                        txtTemperature.text = getString(R.string.temperature_celsius, it.response.temperature.celsius)
+                        val color = ColorTemperatureService(it.response.temperature.celsius).getColor()
+                        circleIndicator.background = getShape(color)
                     }
                 }
             }
         }
+    }
 
+    fun getShape(color: Int): GradientDrawable{
+        val shape = GradientDrawable()
+        shape.shape = GradientDrawable.OVAL
+        shape.setStroke(50, color)
+        return shape
     }
 
 }
