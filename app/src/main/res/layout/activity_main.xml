@@ -48,14 +48,14 @@
         app:layout_constraintTop_toTopOf="@+id/circle_indicator" />
 
     <TextView
-        android:id="@+id/txtFelt"
+        android:id="@+id/txtFeltIndicator"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:gravity="center"
-        android:textSize="20dp"
-        android:text="AGREABLE"
+        android:textSize="20sp"
+        android:text="@string/temperature_felt_unknow"
         android:lines="1"
-        android:background="@color/success"
+        android:background="@color/tmp_unknow"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

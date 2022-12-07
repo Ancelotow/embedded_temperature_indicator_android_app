@@ -10,4 +10,12 @@
 
     <color name="success">#FF03B52C</color>
 
+    <color name="tmp_too_hot">#B30000</color>
+    <color name="tmp_hot">#CAD10D</color>
+    <color name="tmp_good">#FF03B52C</color>
+    <color name="tmp_cold">#0ECACA</color>
+    <color name="tmp_too_cold">#4252E7</color>
+    <color name="tmp_unknow">#AEAEAE</color>
+    <color name="tmp_unbearable">#B3009B</color>
+
 </resources>

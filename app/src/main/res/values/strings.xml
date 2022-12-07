@@ -2,4 +2,13 @@
     <string name="app_name">Temperature Indicator Embedde App</string>
 
     <string name="temperature_celsius">%.2f°C</string>
+
+
+    <string name="temperature_felt_too_hot">TROP CHAUD</string>
+    <string name="temperature_felt_hot">CHAUD</string>
+    <string name="temperature_felt_good">AGREABLE</string>
+    <string name="temperature_felt_cold">FRAIS</string>
+    <string name="temperature_felt_too_cold">TROP FROID</string>
+    <string name="temperature_felt_unbearable">INSUPPORTABLE</string>
+    <string name="temperature_felt_unknow">INCONNU</string>
 </resources>

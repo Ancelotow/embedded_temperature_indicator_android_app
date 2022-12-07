@@ -51,14 +51,13 @@ class MainActivity : AppCompatActivity() {
     private fun bluetoothConnection() {
         val txtTemperature = findViewById<TextView>(R.id.txtTemperature)
         val circleIndicator = findViewById<ImageView>(R.id.circle_indicator)
+        val txtFeltIndicator = findViewById<TextView>(R.id.txtFeltIndicator)
         val bluetoothManager: BluetoothManager = getSystemService(BluetoothManager::class.java)
         this.bluetoothAdapter = bluetoothManager.getAdapter()
         val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
         pairedDevices?.forEach { device ->
             if (!checkPermissionBluetoothDevice(context = this)) {
                 return
-            } else {
-
             }
         }
         val deviceEmbedded = pairedDevices?.find { device -> device.name == deviceName }
@@ -80,17 +79,44 @@ class MainActivity : AppCompatActivity() {
                         txtTemperature.text = getString(R.string.temperature_celsius, it.response.temperature.celsius)
                         val color = ColorTemperatureService(it.response.temperature.celsius).getColor()
                         circleIndicator.background = getShape(color)
+                        drawFeltIndicator(txtFeltIndicator, it.response.temperature.celsius)
                     }
                 }
             }
         }
     }
 
-    fun getShape(color: Int): GradientDrawable{
+    private fun getShape(color: Int): GradientDrawable{
         val shape = GradientDrawable()
         shape.shape = GradientDrawable.OVAL
         shape.setStroke(50, color)
         return shape
+    }
+
+    private fun drawFeltIndicator(txtFeltIndicator :TextView, temperatureCelsius: Double) {
+        var color = getColor(R.color.tmp_unknow)
+        var text = getString(R.string.temperature_felt_unknow)
+        if(temperatureCelsius > 28 || temperatureCelsius < 13) { /// State: Insupportable
+            color = getColor(R.color.tmp_unbearable)
+            text = getString(R.string.temperature_felt_unbearable)
+        } else if(temperatureCelsius <= 28 && temperatureCelsius > 24) { /// State: Trop chaud
+            color = getColor(R.color.tmp_too_hot)
+            text = getString(R.string.temperature_felt_too_hot)
+        } else if(temperatureCelsius <= 24 && temperatureCelsius > 22) { /// State: Chaud
+            color = getColor(R.color.tmp_hot)
+            text = getString(R.string.temperature_felt_hot)
+        } else if(temperatureCelsius in 20.0..22.0) { /// State: Bon
+            color = getColor(R.color.tmp_good)
+            text = getString(R.string.temperature_felt_good)
+        } else if(temperatureCelsius < 20 && temperatureCelsius > 17) { /// State: Frais
+            color = getColor(R.color.tmp_cold)
+            text = getString(R.string.temperature_felt_cold)
+        } else if(temperatureCelsius <= 17 && temperatureCelsius > 13) { /// State: Trop froid
+            color = getColor(R.color.tmp_too_cold)
+            text = getString(R.string.temperature_felt_too_cold)
+        }
+        txtFeltIndicator.setBackgroundColor(color);
+        txtFeltIndicator.text = text;
     }
 
 }

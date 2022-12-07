@@ -47,7 +47,7 @@ class ColorTemperatureService(
         } else if(temperature < COLD){
             val deltaConst = COLD - LIMIT_COLD
             val deltaTemp = COLD - temperature
-            ((deltaTemp * 255) / deltaConst).toInt()
+            255 - ((deltaTemp * 255) / deltaConst).toInt()
         } else if(temperature > HOT){
             val deltaConst = LIMIT_HOT - HOT
             val deltaTemp = temperature - HOT
