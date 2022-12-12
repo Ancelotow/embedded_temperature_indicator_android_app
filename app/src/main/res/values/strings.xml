@@ -2,6 +2,8 @@
     <string name="app_name">Temperature Indicator Embedde App</string>
 
     <string name="temperature_celsius">%.2f°C</string>
+    <string name="temperature_fahrenheit">%.2f°F</string>
+    <string name="temperature_kelvin">%.2f°K</string>
 
 
     <string name="temperature_felt_too_hot">TROP CHAUD</string>
